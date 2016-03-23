@@ -220,10 +220,15 @@ angular.module("com.2fdevs.videogular")
 
             $scope.vgUpdateTime({$currentTime: targetSeconds, $duration: targetDuration});
 
+            // NB in conjunction with the updateTime interval in videogular-youtube, this triggers the
+            // digest cycle every 600ms which essentially kills performance.
+            //
+            // See https://github.com/videogular/videogular/issues/263 for side effects of removing this.
+            //
             // Safe apply just in case we're calling from a non-event
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+            // if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+            //     $scope.$apply();
+            // }
         };
 
         this.checkCuePoints = function checkCuePoints(currentTime) {
