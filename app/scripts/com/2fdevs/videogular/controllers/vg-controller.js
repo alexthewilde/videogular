@@ -506,11 +506,13 @@ angular.module("com.2fdevs.videogular")
 
         this.onStartBuffering = function (event) {
             this.isBuffering = true;
+            this.setState(VG_STATES.PAUSE);
             $scope.$apply();
         };
 
         this.onStartPlaying = function (event) {
             this.isBuffering = false;
+            this.setState(VG_STATES.PLAY);
             $scope.$apply();
         };
 
