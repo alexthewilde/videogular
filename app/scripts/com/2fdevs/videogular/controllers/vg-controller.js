@@ -321,8 +321,12 @@ angular.module("com.2fdevs.videogular")
             $scope.vgSeeked({$currentTime: event.target.currentTime, $duration: event.target.duration});
         };
 
-        this.seekTime = function (value, byPercent) {
+        this.seekTime = function (value, byPercent, userInitiated) {
             var second;
+            if (userInitiated) {
+                $scope.vgUserSeek({$API: this});
+            }
+
             if (byPercent) {
                 if (isVirtualClip) {
                     value = Math.max(0, Math.min(value, 100));

@@ -90,7 +90,7 @@ angular.module("com.2fdevs.videogular.plugins.controls")
                         isSeeking = true;
                         if (isPlaying) isPlayingWhenSeeking = true;
                         API.pause();
-                        API.seekTime(touchX * API.mediaElement[0].duration / slider.scrollWidth);
+                        API.seekTime(touchX * API.mediaElement[0].duration / slider.scrollWidth, false, true);
 
                         scope.$apply();
                     };
@@ -119,7 +119,7 @@ angular.module("com.2fdevs.videogular.plugins.controls")
                         }
 
                         if (isSeeking) {
-                            API.seekTime(touchX * API.mediaElement[0].duration / slider.scrollWidth);
+                            API.seekTime(touchX * API.mediaElement[0].duration / slider.scrollWidth, false, true);
                         }
 
                         scope.$apply();
@@ -139,7 +139,7 @@ angular.module("com.2fdevs.videogular.plugins.controls")
                         if (isPlaying) isPlayingWhenSeeking = true;
                         API.pause();
 
-                        API.seekTime(event.offsetX * API.mediaElement[0].duration / slider.scrollWidth);
+                        API.seekTime(event.offsetX * API.mediaElement[0].duration / slider.scrollWidth, false, true);
 
                         scope.$apply();
                     };
@@ -152,7 +152,7 @@ angular.module("com.2fdevs.videogular.plugins.controls")
                             API.play();
                         }
                         isSeeking = false;
-                        //API.seekTime(event.offsetX * API.mediaElement[0].duration / slider.scrollWidth);
+                        //API.seekTime(event.offsetX * API.mediaElement[0].duration / slider.scrollWidth, false, true);
 
                         scope.$apply();
                     };
@@ -167,7 +167,7 @@ angular.module("com.2fdevs.videogular.plugins.controls")
 
                         if (isSeeking) {
                             event = VG_UTILS.fixEventOffset(event);
-                            API.seekTime(event.offsetX * API.mediaElement[0].duration / slider.scrollWidth);
+                            API.seekTime(event.offsetX * API.mediaElement[0].duration / slider.scrollWidth, false, true);
                         }
 
                         scope.$apply();
@@ -184,11 +184,11 @@ angular.module("com.2fdevs.videogular.plugins.controls")
                         var currentPercent = (API.currentTime / API.totalTime) * 100;
 
                         if (event.which === LEFT || event.keyCode === LEFT) {
-                            API.seekTime(currentPercent - NUM_PERCENT, true);
+                            API.seekTime(currentPercent - NUM_PERCENT, true, true);
                             event.preventDefault();
                         }
                         else if (event.which === RIGHT || event.keyCode === RIGHT) {
-                            API.seekTime(currentPercent + NUM_PERCENT, true);
+                            API.seekTime(currentPercent + NUM_PERCENT, true, true);
                             event.preventDefault();
                         }
                     };
