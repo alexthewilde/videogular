@@ -315,36 +315,42 @@ angular.module("com.2fdevs.videogular")
         };
 
         this.seekTime = function (value, byPercent, userInitiated) {
-            var second;
-            if (userInitiated) {
-                $scope.vgUserSeek({$API: this});
-            }
+            var second, seekTo;
 
             if (byPercent) {
                 if (isVirtualClip) {
                     value = Math.max(0, Math.min(value, 100));
                     second = (value * this.virtualClipDuration / 100);
-                    this.mediaElement[0].currentTime = this.startTime + second;
+                    seekTo = this.startTime + second;
                 }
                 else {
-                    second = value * this.mediaElement[0].duration / 100;
-                    this.mediaElement[0].currentTime = second;
+                    seekTo = value * this.mediaElement[0].duration / 100;
                 }
             }
             else {
                 if (isVirtualClip) {
                     var durationPercent = value/this.mediaElement[0].duration;
                     second = !hasStartTimePlayed ? 0 : this.virtualClipDuration * durationPercent;
-                    this.mediaElement[0].currentTime = !hasStartTimePlayed ? this.startTime : this.startTime + second;
+                    seekTo = !hasStartTimePlayed ? this.startTime : this.startTime + second;
                 }
                 else {
-                    second = value;
-                    this.mediaElement[0].currentTime = second;
+                    seekTo = value;
                 }
             }
 
-            this.currentTime = 1000 * second;
+            // FLOWRA
+            // Route user initiated seek (e.g. via scrub bar) through the central
+            // playback API which will call seekTime eventually again program-
+            // matically. This way maintain the unidirectional data flow.
+            if (userInitiated) {
+                $scope.vgUserSeek({$time: seekTo});
+            }
+            else {
+                this.mediaElement[0].currentTime = seekTo
+                this.currentTime = 1000 * seekTo;
+            }
         };
+
 
         this.playPause = function () {
             if (this.mediaElement[0].paused) {
@@ -357,9 +363,22 @@ angular.module("com.2fdevs.videogular")
 
         this.setState = function (newState) {
             if (newState && newState != this.currentState) {
-                $scope.vgUpdateState({$state: newState});
-
+                // FLOWRA
+                // Set new state _before_ calling vgUpdateState. In case the new
+                // state needs to be synced with the playback API (e.g. upon user
+                // initated pause/play directly on YT player, or on buffering),
+                // then the new state needs to be present in 'pauseTransport',
+                // 'playSource' and 'pauseSource' event listeners. There we
+                // check if the current player state matches the requested state
+                // and abort in order to prevent a circular sync:
+                //
+                // user pauses YT player directly
+                // -> vgUpdateState callback: transportState != 'pause'?
+                // -> pause transport
+                // -> 'pauseTransport' listener: player paused? abort.
+                // => synced transport state with player state.
                 this.currentState = newState;
+                $scope.vgUpdateState({$state: newState});
             }
 
             return this.currentState;
