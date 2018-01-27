@@ -129,11 +129,15 @@ angular.module("com.2fdevs.videogular")
             isMetaDataLoaded = true;
             isVirtualClip = this.startTime >= 0 && this.virtualClipDuration > 0;
 
-            //Set media volume from localStorage if available
-            if (VG_UTILS.supportsLocalStorage()) {
-                //Default to 100% volume if local storage setting does not exist.
-                this.setVolume(parseFloat($window.localStorage.getItem(VG_VOLUME_KEY) || '1'));
-            }
+            // FLOWRA
+            // Deactivated. This conflicts with our workaround for Safari's autoplay
+            // restriction. Only flowra must control the current volume.
+            //
+            // //Set media volume from localStorage if available
+            // if (VG_UTILS.supportsLocalStorage()) {
+            //     //Default to 100% volume if local storage setting does not exist.
+            //     this.setVolume(parseFloat($window.localStorage.getItem(VG_VOLUME_KEY) || '1'));
+            // }
 
             if ($scope.vgConfig) {
                 vgConfigLoader.loadConfig($scope.vgConfig).then(
