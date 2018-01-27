@@ -581,7 +581,11 @@ angular.module("com.2fdevs.videogular")
 
         this.onStartBuffering = function (event) {
             this.isBuffering = true;
-            this.setState(VG_STATES.PAUSE);
+            // FLOWRA
+            // Actually emit state 'buffering'. Using 'pause' here is wrong and
+            // makes transport sync confuse it for "the user manually paused the video".
+            this.setState('buffering');
+            // this.setState(VG_STATES.PAUSE);
             $scope.$apply();
         };
 
