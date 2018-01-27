@@ -421,7 +421,10 @@ angular.module("com.2fdevs.videogular")
                     });
             }
 
-            this.setState(VG_STATES.PLAY);
+            // FLOWRA
+            // DO NOT directly mutate the player state here! Must flow reactively
+            // from mediaElement to onPlay()
+            // this.setState(VG_STATES.PLAY);
         };
 
         this.pause = function () {
@@ -435,7 +438,10 @@ angular.module("com.2fdevs.videogular")
                 mediaElement.pause()
             }
 
-            this.setState(VG_STATES.PAUSE);
+            // FLOWRA
+            // DO NOT directly mutate the player state here! Must flow reactively
+            // from mediaElement to onPause()
+            // this.setState(VG_STATES.PAUSE);
         };
 
         this.stop = function () {
@@ -448,7 +454,10 @@ angular.module("com.2fdevs.videogular")
                 this.currentTime = targetTime;
                 this.buffered = [];
                 this.bufferEnd = 0;
-                this.setState(VG_STATES.STOP);
+                // FLOWRA
+                // DO NOT directly mutate the player state here! Must flow reactively
+                // from mediaElement to onStop()
+                // this.setState(VG_STATES.STOP);
             }
             catch (e) {
                 return e;
