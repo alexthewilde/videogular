@@ -328,7 +328,7 @@ angular.module("com.2fdevs.videogular")
             $scope.vgSeeked({$currentTime: event.target.currentTime, $duration: event.target.duration});
         };
 
-        this.seekTime = function (value, byPercent) {
+        this.seekTime = function (value, byPercent, userInitiated) {
             if (!Number.isFinite(value)) {
                 throw new TypeError('Expecting a finite number value.');
             }
