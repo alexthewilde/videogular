@@ -333,7 +333,7 @@ angular.module("com.2fdevs.videogular")
                 throw new TypeError('Expecting a finite number value.');
             }
 
-            var second;
+            var second, seekTo;
             if (byPercent) {
                 if (isVirtualClip) {
                     value = Math.max(0, Math.min(value, 100));
