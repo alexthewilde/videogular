@@ -86,6 +86,7 @@ angular.module("com.2fdevs.videogular")
             this.mediaElement[0].removeEventListener("canplay", this.onCanPlay.bind(this), false);
             this.mediaElement[0].removeEventListener("loadedmetadata", this.onLoadMetaData.bind(this), false);
             this.mediaElement[0].removeEventListener("waiting", this.onStartBuffering.bind(this), false);
+            this.mediaElement[0].removeEventListener("positioned", this.onPositioned.bind(this), false);
             this.mediaElement[0].removeEventListener("ended", this.onComplete.bind(this), false);
             this.mediaElement[0].removeEventListener("playing", this.onStartPlaying.bind(this), false);
             this.mediaElement[0].removeEventListener("play", this.onPlay.bind(this), false);
@@ -589,6 +590,12 @@ angular.module("com.2fdevs.videogular")
             $scope.$apply();
         };
 
+        // FLOWRA
+        this.onPositioned = function (event) {
+            this.setState('positioned');
+            $scope.$apply();
+        };
+
         this.onStartPlaying = function (event) {
             this.isBuffering = false;
             this.setState(VG_STATES.PLAY);
@@ -617,6 +624,7 @@ angular.module("com.2fdevs.videogular")
             this.mediaElement[0].addEventListener("canplay", this.onCanPlay.bind(this), false);
             this.mediaElement[0].addEventListener("loadedmetadata", this.onLoadMetaData.bind(this), false);
             this.mediaElement[0].addEventListener("waiting", this.onStartBuffering.bind(this), false);
+            this.mediaElement[0].addEventListener("positioned", this.onPositioned.bind(this), false);
             this.mediaElement[0].addEventListener("ended", this.onComplete.bind(this), false);
             this.mediaElement[0].addEventListener("playing", this.onStartPlaying.bind(this), false);
             this.mediaElement[0].addEventListener("play", this.onPlay.bind(this), false);
