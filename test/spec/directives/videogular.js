@@ -20,6 +20,7 @@ describe('Directive: Videogular', function () {
             preload: "none",
             controls: true,
             loop: true,
+            nativePlayBlacklist: null,
             sources: [
                 {src: $sce.trustAsResourceUrl("assets/videos/videogular.mp4"), type: "video/mp4"},
                 {src: $sce.trustAsResourceUrl("assets/videos/videogular.webm"), type: "video/webm"},
@@ -46,8 +47,8 @@ describe('Directive: Videogular', function () {
         };
 
         element = angular.element(
-            '<videogular vg-theme="config.theme.url">' +
-            '<vg-media vg-src="config.sources" vg-tracks="config.tracks" vg-native-controls="config.controls" vg-preload="config.preload" vg-loop="config.loop"></vg-media>' +
+            '<videogular vg-theme="config.theme.url" vg-clear-media-on-navigate="\'false\'">' +
+            '<vg-media vg-src="config.sources" vg-tracks="config.tracks" vg-native-controls="config.controls" vg-preload="config.preload" vg-loop="config.loop" vg-native-play-blacklist="config.nativePlayBlacklist"></vg-media>' +
             '</videogular>'
         );
 
@@ -100,6 +101,12 @@ describe('Directive: Videogular', function () {
     });
 
     describe("API - ", function () {
+        it("should convey the activeSource", function(){
+            var API = element.isolateScope().API;
+
+            expect(API.activeSource).toBe(API.sources[0]);
+        });
+
         it("should play mediaElement on call API.play", function () {
             var API = element.isolateScope().API;
             var video = API.mediaElement[0];
@@ -154,6 +161,85 @@ describe('Directive: Videogular', function () {
             API.setVolume(0.5);
             expect(video.volume).toBe(0.5);
             expect(API.volume).toBe(0.5);
+        });
+
+        it("should throw an error on an invalid seek time", function() {
+            var API = element.isolateScope().API;
+
+            function invalidSeek() {
+                return API.seekTime(Number.Infinity);
+            }
+
+            expect(invalidSeek).toThrowError(TypeError);
+        });
+    });
+
+    describe("Boolean configuration - ", function() {
+        it("should have the expected input", function() {
+            var scope = element.isolateScope();
+
+            expect(scope.vgClearMediaOnNavigate).toBe('false');
+        });
+
+        it("should handle 'false' correctly", function() {
+            var API = element.isolateScope().API;
+
+            expect(API.clearMediaOnNavigate).toBe(false);
+        });
+    });
+
+    describe("vgNativePlayBlacklist - ", function() {
+        function updateSources(API) {
+            API.sources = angular.copy(API.sources);
+            $scope.$apply();
+        }
+
+        it("should handle an empty array", function() {
+            var API = element.isolateScope().API;
+            var video = API.mediaElement;
+
+            spyOn(API, "changeSource");
+
+            $scope.config.nativePlayBlacklist = [];
+            updateSources(API);
+
+            
+            expect(API.changeSource).toHaveBeenCalledWith(jasmine.objectContaining({type: "video/mp4"}));
+
+            expect(video.attr("src")).toBe("assets/videos/videogular.mp4");
+        });
+
+        it("should blacklist mp4", function(){
+            var API = element.isolateScope().API;
+            var video = API.mediaElement;
+
+            spyOn(API, "changeSource");
+
+            $scope.config.nativePlayBlacklist = [
+                function blacklistMp4(source, userAgent) {
+                    //expect source and userAgent to be defined
+                    return source.type === 'video/mp4';
+                }
+            ];
+            updateSources(API);
+            
+            expect(API.changeSource).not.toHaveBeenCalledWith(jasmine.objectContaining({type: "video/mp4"}));
+            expect(video.attr("src")).not.toBe("assets/videos/videogular.mp4");
+        });
+    });
+
+    describe("Source isLive override - ", function() {
+        it("should apply the isLive source override correctly", function() {
+            var API = element.isolateScope().API;
+
+            API.sources = API.sources.map(function(source) {
+                source.isLive = true;
+
+                return source;
+            }); 
+            $scope.$apply();
+
+            expect(API.isLive).toBe(true);
         });
     });
 });
