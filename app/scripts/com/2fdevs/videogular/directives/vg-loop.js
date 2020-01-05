@@ -39,7 +39,9 @@ angular.module("com.2fdevs.videogular")
                         );
                     }
                     else {
-                        scope.$watch(attr.vgLoop, function (newValue, oldValue) {
+                        scope.$watch(function() {
+                            return attr.vgLoop;
+                        }, function (newValue, oldValue) {
                             if ((!loop || newValue != oldValue) && newValue) {
                                 loop = newValue;
                                 scope.setLoop(loop);

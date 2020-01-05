@@ -39,7 +39,9 @@ angular.module("com.2fdevs.videogular")
                         );
                     }
                     else {
-                        scope.$watch(attr.vgPreload, function (newValue, oldValue) {
+                        scope.$watch(function() {
+                            return attr.vgPreload;
+                        }, function (newValue, oldValue) {
                             if ((!preload || newValue != oldValue) && newValue) {
                                 preload = newValue;
                                 scope.setPreload(preload);

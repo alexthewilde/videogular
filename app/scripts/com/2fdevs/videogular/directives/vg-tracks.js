@@ -105,7 +105,9 @@ angular.module("com.2fdevs.videogular")
                         );
                     }
                     else {
-                        scope.$watch(attr.vgTracks, function (newValue, oldValue) {
+                        scope.$watch(function() {
+                            return attr.vgTracks;
+                        }, function (newValue, oldValue) {
                             if ((!tracks || newValue != oldValue)) {
                                 scope.setTracks(newValue);
                             }

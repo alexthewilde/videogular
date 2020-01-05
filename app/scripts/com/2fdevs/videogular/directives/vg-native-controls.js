@@ -39,7 +39,9 @@ angular.module("com.2fdevs.videogular")
                         );
                     }
                     else {
-                        scope.$watch(attr.vgNativeControls, function (newValue, oldValue) {
+                        scope.$watch(function() {
+                            return attr.vgNativeControls;
+                        }, function (newValue, oldValue) {
                             if ((!controls || newValue != oldValue) && newValue) {
                                 controls = newValue;
                                 scope.setControls(controls);

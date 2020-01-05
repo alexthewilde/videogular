@@ -41,7 +41,9 @@ angular.module("com.2fdevs.videogular")
                         );
                     }
                     else {
-                        scope.$watch(attr.vgCrossorigin, function (newValue, oldValue) {
+                        scope.$watch(function() {
+                            return attr.vgCrossorigin;
+                        }, function (newValue, oldValue) {
                             if ((!crossorigin || newValue != oldValue) && newValue) {
                                 crossorigin = newValue;
                                 scope.setCrossorigin(crossorigin);
