@@ -84,6 +84,7 @@ angular.module("com.2fdevs.videogular")
         this.clearMedia = function () {
             this.mediaElement[0].src = '';
             this.mediaElement[0].removeEventListener("canplay", this.onCanPlay.bind(this), false);
+            this.mediaElement[0].removeEventListener("canplaythrough", this.onCanPlayThrough.bind(this), false);
             this.mediaElement[0].removeEventListener("loadedmetadata", this.onLoadMetaData.bind(this), false);
             this.mediaElement[0].removeEventListener("waiting", this.onStartBuffering.bind(this), false);
             this.mediaElement[0].removeEventListener("positioned", this.onPositioned.bind(this), false);
@@ -114,6 +115,10 @@ angular.module("com.2fdevs.videogular")
                 this.seekTime(this.startTime);
                 hasStartTimePlayed = true;
             }
+        };
+
+        this.onCanPlayThrough = function (evt) {
+            $scope.$parent.$digest($scope.vgCanPlayThrough({$event: evt}));
         };
 
         this.onVideoReady = function () {
@@ -622,6 +627,7 @@ angular.module("com.2fdevs.videogular")
 
         this.addListeners = function () {
             this.mediaElement[0].addEventListener("canplay", this.onCanPlay.bind(this), false);
+            this.mediaElement[0].addEventListener("canplaythrough", this.onCanPlayThrough.bind(this), false);
             this.mediaElement[0].addEventListener("loadedmetadata", this.onLoadMetaData.bind(this), false);
             this.mediaElement[0].addEventListener("waiting", this.onStartBuffering.bind(this), false);
             this.mediaElement[0].addEventListener("positioned", this.onPositioned.bind(this), false);

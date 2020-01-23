@@ -97,6 +97,7 @@
  }
  * </pre>
  * @param {function} vgCanPlay Function name in controller's scope to call when video is able to begin playback
+ * @param {function} vgCanPlayThrough Function name in controller's scope to call when video is able to begin playback without the need to buffer
  * @param {function} vgStartPlaying Function name in controller's scope to call when playback has started.
  * @param {function} vgComplete Function name in controller's scope to call when video have been completed.
  * @param {function} vgUpdateVolume Function name in controller's scope to call when volume changes. Receives a param with the new volume.
@@ -132,6 +133,7 @@ angular.module("com.2fdevs.videogular")
                 vgCuePoints: "=?",
                 vgConfig: "@",
                 vgCanPlay: "&",
+                vgCanPlayThrough: "&",
                 vgStartPlaying: "&",
                 vgComplete: "&",
                 vgUpdateVolume: "&",
