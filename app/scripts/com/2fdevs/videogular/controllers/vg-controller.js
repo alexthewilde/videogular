@@ -544,6 +544,20 @@ angular.module("com.2fdevs.videogular")
             }
         };
 
+        // FLOWRA
+        this.mute = function () {
+            $scope.vgUpdateVolume({$volume: 0});
+            this.mediaElement[0].mute();
+            this.volume = 0;
+        }
+
+        // FLOWRA
+        this.unmute = function () {
+            $scope.vgUpdateVolume({$volume: 1});
+            this.mediaElement[0].unmute();
+            this.volume = 1;
+        }
+
         this.setPlayback = function (newPlayback) {
             $scope.vgUpdatePlayback({$playBack: newPlayback});
 
